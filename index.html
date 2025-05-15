@@ -1,0 +1,251 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Exprimir Jugo de Naranja</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+  body {
+    background: linear-gradient(135deg, #fbd3e9, #bb377d);
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #333;
+  }
+  .container {
+    background: white;
+    max-width: 400px;
+    border-radius: 18px;
+    box-shadow: 0 12px 24px rgba(187,55,125,0.3);
+    padding: 2.5rem;
+    text-align: center;
+    position: relative;
+  }
+  h1 {
+    color: #f57224;
+    margin-bottom: 1.5rem;
+  }
+  #orange {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background: radial-gradient(circle at center, #ffa94d 40%, #f57c00 90%);
+    box-shadow:
+      inset -10px -10px 15px #ffb347,
+      inset 10px 10px 25px #cc6e00,
+      0 5px 10px rgba(0,0,0,0.1);
+    margin: 0 auto 2rem;
+    position: relative;
+    cursor: pointer;
+    overflow: visible;
+    transition: transform 0.3s ease;
+  }
+  #orange:active {
+    transform: scale(0.95);
+  }
+
+  /* Texture dots on the orange */
+  .dot {
+    position: absolute;
+    background: #ffbc57;
+    border-radius: 50%;
+    box-shadow: 0 0 3px 1px #f5a623;
+  }
+  .dot1 { width: 9px; height: 9px; top: 30px; left: 35px; }
+  .dot2 { width: 7px; height: 7px; top: 50px; right: 45px; }
+  .dot3 { width: 8px; height: 8px; bottom: 60px; left: 60px; }
+  .dot4 { width: 6px; height: 6px; bottom: 45px; right: 50px; }
+  .dot5 { width: 6px; height: 6px; top: 80px; left: 90px; }
+
+  /* Juice drop container */
+  #juice-drop {
+    position: absolute;
+    top: 180px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 30px;
+    background: radial-gradient(circle at 30% 30%, #ffa94d, #f57c00);
+    border-radius: 50% 50% 60% 60% / 100% 100% 85% 85%;
+    filter: drop-shadow(0 2px 2px rgba(245,124,0,0.7));
+    opacity: 0;
+    animation-fill-mode: forwards;
+  }
+
+  @keyframes dropJuice {
+    0% {
+      opacity: 0;
+      transform: translateX(-50%) translateY(0) scale(1);
+    }
+    50% {
+      opacity: 1;
+      transform: translateX(-50%) translateY(100px) scale(0.8);
+    }
+    100% {
+      opacity: 0;
+      transform: translateX(-50%) translateY(180px) scale(0.6);
+    }
+  }
+
+  /* Squeeze animation */
+  @keyframes squeeze {
+    0%, 100% { transform: scale(1); }
+    25%, 75% { transform: scale(0.9, 1.1); }
+    50% { transform: scale(1, 0.8); }
+  }
+
+  button {
+    margin-top: 1.5rem;
+    background-color: #f57224;
+    border: none;
+    border-radius: 40px;
+    padding: 0.85rem 2rem;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 6px 12px rgba(245,114,36,0.7);
+    transition: background-color 0.3s ease;
+  }
+  button:hover:not(:disabled) {
+    background-color: #d05d1c;
+  }
+  button:disabled {
+    background-color: #aaa;
+    cursor: default;
+  }
+
+  #mensaje {
+    margin-top: 1rem;
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: #27ae60;
+    min-height: 2em;
+  }
+
+  /* Vaso de jugo */
+  #glass {
+    width: 100px;
+    height: 140px;
+    background: linear-gradient(to top, #f7941e 25%, #fbdcae 100%);
+    border-radius: 20px 20px 10px 10px;
+    margin: 1.5rem auto 0;
+    box-shadow:
+      inset 0 -10px 20px #f88f15,
+      0 6px 10px rgba(247,146,30,0.7);
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  #glass.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Detalles del vaso (líneas simulan reflejo) */
+  #glass::before, #glass::after {
+    content: "";
+    position: absolute;
+    top: 20px;
+    width: 8px;
+    height: 90px;
+    background: rgba(255,255,255,0.35);
+    border-radius: 8px;
+    filter: blur(1.2px);
+  }
+  #glass::before {
+    left: 20px;
+    transform: rotate(8deg);
+  }
+  #glass::after {
+    left: 60px;
+    transform: rotate(-6deg);
+  }
+</style>
+</head>
+<body>
+  <div class="container" role="main">
+    <h1>Exprimir Juguito de Naranja 🍊</h1>
+    <div id="orange" tabindex="0" aria-label="Naranja para exprimir" role="button">
+      <div class="dot dot1"></div>
+      <div class="dot dot2"></div>
+      <div class="dot dot3"></div>
+      <div class="dot dot4"></div>
+      <div class="dot dot5"></div>
+    </div>
+    <div id="juice-drop" aria-hidden="true"></div>
+    <button id="btnPrepara">Exprimir Jugo</button>
+    <div id="mensaje" aria-live="polite" role="alert"></div>
+    <div id="glass" aria-hidden="true" title="Vaso de jugo de naranja"></div>
+  </div>
+
+<script>
+  const orange = document.getElementById('orange');
+  const juiceDrop = document.getElementById('juice-drop');
+  const btnPrepara = document.getElementById('btnPrepara');
+  const mensaje = document.getElementById('mensaje');
+  const glass = document.getElementById('glass');
+
+  function startSqueezeAnimation() {
+    orange.style.animation = 'squeeze 1.2s ease forwards';
+  }
+  function stopSqueezeAnimation() {
+    orange.style.animation = '';
+  }
+
+  function animateJuiceDrop() {
+    juiceDrop.style.opacity = '1';
+    juiceDrop.style.animation = 'dropJuice 1.5s ease forwards';
+  }
+  function resetJuiceDrop() {
+    juiceDrop.style.opacity = '0';
+    juiceDrop.style.animation = '';
+  }
+
+  function showGlass() {
+    glass.classList.add('show');
+  }
+  function hideGlass() {
+    glass.classList.remove('show');
+  }
+
+  function prepararJugo() {
+    btnPrepara.disabled = true;
+    mensaje.textContent = '';
+    hideGlass();
+    startSqueezeAnimation();
+    animateJuiceDrop();
+
+    setTimeout(() => {
+      stopSqueezeAnimation();
+    }, 1200);
+
+    setTimeout(() => {
+      resetJuiceDrop();
+      mensaje.textContent = '¡Tu juguito de naranja está listo con mucho amor para ti! 🍊💛🥤';
+      showGlass();
+      btnPrepara.disabled = false;
+    }, 2200);
+  }
+
+  btnPrepara.addEventListener('click', prepararJugo);
+
+  // Also allow keyboard Enter or Space on orange to trigger the squeeze
+  orange.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      prepararJugo();
+    }
+  });
+</script>
+</body>
+</html>
+
+```
